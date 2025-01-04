@@ -133,11 +133,13 @@ class Scan:
     
     def start_scan(self, url):
         target = Target()
-        if self.get_scans_status():
-            logger.info(f"The number of tasks being scanned has reached {config.max_task}. Try again in 5 minutes ...")
-            time.sleep(60 * 5)
-            return False
-        
+        while True:
+            if self.get_scans_status():
+                logger.info(f"The number of tasks being scanned has reached {config.max_task}. Try again in 5 minutes ...")
+                time.sleep(60 * 5)
+            else:
+                break
+                
         target_id = target.add_target(url)
         if target_id == "error":
             return False
